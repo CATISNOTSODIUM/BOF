@@ -19,3 +19,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+code {
+  font-size: 20px;
+  line-height: 28px;
+}
