@@ -2,7 +2,7 @@ import { popover } from "@nextui-org/react";
 import { Result, Token, TokenType, ok } from "./types";
 
 // naive brainfuck evaluator
-export function bf_evaluate(tokens: Token[]): Result<number[], string> {
+export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[] | [number[], number[]], string> {
     const mem = [0];
     let mem_pos = 0;
     let token_pos = 0;
@@ -39,5 +39,8 @@ export function bf_evaluate(tokens: Token[]): Result<number[], string> {
         if (token_pos < tokens.length) $bf_evaluate();
     }
     $bf_evaluate();
-    return ok(stash);
+    if (!mem_return) return ok(stash);
+    else return ok([stash, mem]);
 }
+
+// macros 
