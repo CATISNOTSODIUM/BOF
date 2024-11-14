@@ -1,8 +1,8 @@
-import { predeclared_macros } from "./macros";
+import { predeclared_objects } from "./predeclared";
 import { Result, Token, TokenType, ok, error, Env, EnvFrame} from "./types";
 
 // naive brainfuck evaluator
-export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[] | [number[], number[], number], string> {
+export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] | [number[], number[], any], string> {
     const mem = [0];
     let mem_pos = 0;
     let token_pos = 0;
@@ -11,7 +11,7 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
     let global_env: Env = init_env(); // [name, value]
     let current_env: Env = global_env;
     function init_env() {
-        return <Env>[predeclared_macros, null];
+        return <Env>[predeclared_objects, null];
     }
     function find(env: Env, name: any): any | null {
         if (env !== null) {
@@ -25,7 +25,6 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
                 return null;
             }
             const value = $find(frame.names, frame.values);
-            console.log("SUBFIND", value);
             if (value != null) return value;
             return find((<[EnvFrame, Env]>env)[1], name);
         }
@@ -33,7 +32,6 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
     }
 
     function assign(env: Env, name: string, value: any){
-        console.log("ASSIGN", name, value);
         if (env !== null) {
             const frame = (<[EnvFrame, Env]>env)[0];
             const next_env = (<[EnvFrame, Env]>env)[1];
@@ -81,7 +79,6 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
                 consume(TokenType.EQUAL, "Expect `=` after identifier");
                 token_pos -= 1;
                 let value = expression(); 
-                console.log("EXP", value);
                 current_env = <Env>assign(current_env, name, value);
                 return value;
             } else if (match(TokenType.MACRO)) {
@@ -96,13 +93,16 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
             } else {
                 // assign identifier the value
                 const result = find(current_env, name);
-                console.log("FIND", name, result);
                 if (result == null) throw new Error(`Cannot find name '${name}' in this scope.`)
                 if (Array.isArray(result)) {
                     if (result[0] === "macro") {
                         result[1].push({type: TokenType.NEW_LINE, lexeme: ""});
                         tokens.splice(token_pos, 0, ...result[1]);
+                    } else if (result[0] === "function") {
+                        stash.push(result[1](mem[mem_pos]));
+                        // token_pos+=1;
                     }
+
                 } else {
                     mem[mem_pos] = result; // literal
                 }

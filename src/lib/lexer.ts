@@ -23,7 +23,7 @@ export function lexing(source: string): Result<Token[], String> {
             if (next_symbol !== '/') {
                 return error('Expected // for comments.');
             }
-            while (true) {
+            while (!isAtEnd()) {
                 const next_symbol = peek();
                 if (next_symbol == '\n') break;
                 advance();
