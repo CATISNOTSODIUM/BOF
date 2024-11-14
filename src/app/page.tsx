@@ -9,10 +9,10 @@ export default function Home() {
     <div className="m-10 flex flex-col gap-2 max-h-screen items-center font-body">
       <div className="text-5xl font-bold font-code"> BOF </div>
       <div className="text-xl">
-        🧠 Brainf*ck with higher order functions (HOF) ✨.
+        🧠 Brainf*ck with macros ✨.
       </div>
       <div className="mb-4 w-2/3 text-gray-500">
-        While brainf*ck is notoriously known for its minimalistic and impractical, BOF makes programming language in brainf*ck slightly more forgiving with macros and functions.
+        While brainf*ck is notoriously known for its minimalistic and impractical, BOF makes programming language in brainf*ck slightly more forgiving with macros and variables.
       You can read the following <Link href="/docs" className="text-purple-600"> documentation </Link> to get started.
       </div>
       <CodeBlock/>

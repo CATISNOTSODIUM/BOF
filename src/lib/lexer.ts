@@ -16,6 +16,8 @@ export function lexing(source: string): Result<Token[], String> {
         } else if (c == '\n' || c == ';') {
             line+=1;
             tokens.push({type: TokenType.NEW_LINE, lexeme: ""});
+        } else if (c == '|') {
+            tokens.push({type: TokenType.BREAK, lexeme: ""});
         } else if (c == '/') {
             const next_symbol = advance();
             if (next_symbol !== '/') {

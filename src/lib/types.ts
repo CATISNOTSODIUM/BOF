@@ -1,6 +1,6 @@
 export enum TokenType {
     LEFT_PAREN, RIGHT_PAREN, DOT, EQUAL, NEW_LINE, IDENTIFIER,
-    LEFT, RIGHT, PLUS, MINUS, COMMA, MACRO
+    LEFT, RIGHT, PLUS, MINUS, COMMA, MACRO, BREAK
 }
 
 export interface Token {

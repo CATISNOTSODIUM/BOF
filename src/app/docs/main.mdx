@@ -37,6 +37,41 @@ This code can be breakdown as follows.
 ## Macros
 Macros abstracts the repeated instruction, making the code more readable.
 
-- `x $= ++++.>`  // add 4 to the current block, output its value and move to its consecutive block.
+Here is some quick example.
+
+- `x $= ++++.> |`  // add 4 to the current block, output its value and move to its consecutive block.
 -  `x x x` // output 4, 4, 4 memory [ 4 | 4 | 4 | 0 ]
+
+You can do bunch of cool things with macros.
+
+- `mov $= [->+<]> |` // allocate value from current block to the next one
+- `+ mov mov mov` // memory [ 0 | 0 | 0 | 1 ]
+
+---
+
+Note that macros is multi-lined by default. You have to use `|` to stop recording macros. Here is another example.
+
+- `cpy $= x=.;>x|` // copy the value from this block and transfer to another block.
+- `+++;` // set initial value to 3
+- `cpy cpy cpy` // memory [ 3 | 3 | 3 | 3 ]
+
+
+We can also use macros to multiply two numbers.
+```
+// multiplying two numbers 
+mul $= 
+  tmp=>;<; // save temporary value
+  [->tmp[->+<]<]
+|
++++>++<mul
+```
+## Predeclared macros
+
+Here are some macros that have been predeclared. 
+
+### `new` 
+
+The macro `new` moves the pointer to the position with `0`.
+`new` is defined as `new $= [>] |`.
+
 ---
