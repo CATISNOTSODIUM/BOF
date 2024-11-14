@@ -25,3 +25,25 @@ code {
   font-size: 20px;
   line-height: 28px;
 }
+
+
+@layer base {
+  h1 {
+    @apply text-3xl font-bold font-code text-purple-800;
+  }
+  h2 {
+    @apply text-2xl font-bold font-code
+  }
+  h3 {
+    @apply text-2xl font-bold font-code
+  }
+  li {
+    @apply text-base font-code text-gray-500
+  }
+  p {
+    @apply text-base font-code
+  }
+  code {
+    @apply font-code text-purple-600
+  }
+}

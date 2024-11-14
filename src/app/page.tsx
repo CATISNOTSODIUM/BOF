@@ -3,16 +3,17 @@ import { ParseAndEvaluate } from "@/lib/mce";
 import CodeMirror from "@uiw/react-codemirror";
 import React from "react";
 import {Result, ok, error, is_error} from "@/lib/types";
-
+import Link from 'next/link'
 export default function Home() {
   return (
-    <div className="m-10 flex flex-col gap-2 h-screen items-center font-body overflow-hidden">
+    <div className="m-10 flex flex-col gap-2 max-h-screen items-center font-body">
       <div className="text-5xl font-bold font-code"> BOF </div>
       <div className="text-xl">
         🧠 Brainf*ck with higher order functions (HOF) ✨.
       </div>
       <div className="mb-4 w-2/3 text-gray-500">
         While brainf*ck is notoriously known for its minimalistic and impractical, BOF makes programming language in brainf*ck slightly more forgiving with macros and functions.
+      You can read the following <Link href="/docs" className="text-purple-600"> documentation </Link> to get started.
       </div>
       <CodeBlock/>
     </div>
@@ -47,6 +48,7 @@ function CodeBlock() {
       } else {
         const output = result.data[0];
         const mem = result.data[1];
+        const mem_pos = result.data[2];
         let display_mem = "";
         if (mem.length < 12) {
           display_mem = "| " + mem.join(" | ") + " |";
@@ -55,7 +57,7 @@ function CodeBlock() {
           const mem_second = mem.slice(mem.length - 4, mem.length - 1);
           display_mem = "| " + mem_first.join(" | ") + " ... " + mem_second.join(" | ") + " | ";
         }
-        setOutput(`--- ${mem.length} blocks ---\n`+display_mem + "\n-----------------\n" + output.join("\n"));
+        setOutput(`--- ${mem.length} blocks ---\nmem_pos: ${mem_pos}\n`+display_mem + "\n-----------------\n" + output.join("\n"));
         // Ascii output
         // setOutput(String.fromCharCode.apply(String, result.data))
       }
@@ -94,7 +96,7 @@ function CodeBlock() {
       >
           CLEAR   🗑️
       </button>
-    </div>
+   </div>
     
     <div className="grid grid-cols-4  w-full h-full ">
 
