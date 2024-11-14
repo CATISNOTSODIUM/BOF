@@ -2,7 +2,7 @@
 While brainf_ck is notoriously known for its minimalistic and impractical, BOF makes programming language in brainf_ck slightly more forgiving with macros and variables.
 
 ## Quick start
-You can try our beloved BOF in our playground <u>here</u>.
+You can try our beloved BOF in our playground <a href="https://bof-blush.vercel.app/">here</a>.
 Before start exploring BOF, we recommend you to learn the basic syntax of [<u>Brainfuck</u>](https://en.wikipedia.org/wiki/Brainfuck).
 Here are some quick examples.
 ```
