@@ -1,6 +1,6 @@
 export enum TokenType {
     LEFT_PAREN, RIGHT_PAREN, DOT, EQUAL, NEW_LINE, IDENTIFIER,
-    LEFT, RIGHT, PLUS, MINUS, COMMA
+    LEFT, RIGHT, PLUS, MINUS, COMMA, MACRO
 }
 
 export interface Token {
@@ -49,3 +49,11 @@ export function unwrap<T, E>(data: Result<T, E>): any {
         return data.data;
     }
 }
+
+
+// Environment
+export interface EnvFrame {
+    names: string[],
+    values: any
+}
+export type Env = null | [EnvFrame, Env];

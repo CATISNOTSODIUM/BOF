@@ -13,9 +13,26 @@ export function lexing(source: string): Result<Token[], String> {
             identifier();
         } else if (isWhiteSpace(c)) {
             continue;
-        } else if (c == '\n') {
+        } else if (c == '\n' || c == ';') {
             line+=1;
             tokens.push({type: TokenType.NEW_LINE, lexeme: ""});
+        } else if (c == '/') {
+            const next_symbol = advance();
+            if (next_symbol !== '/') {
+                return error('Expected // for comments.');
+            }
+            while (true) {
+                const next_symbol = peek();
+                if (next_symbol == '\n') break;
+                advance();
+            }
+        } else if (c=='$') {
+            const next_symbol = advance();
+            if (next_symbol !== '=') {
+                return error('Expected = after $ for macros.');
+            }
+            advance();
+            tokens.push({type: TokenType.MACRO, lexeme: ""});
         } else if (c== '[' ) {
             tokens.push({type: TokenType.LEFT_PAREN, lexeme: ""});
         } else if (c== ']' ) {
