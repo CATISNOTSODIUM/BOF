@@ -32,7 +32,7 @@ function CodeBlock() {
       if (is_error(result)) {
         setStatus(result.data as string);
       } else {
-        setOutput((result.data as Number[]).join("\n"));
+        setOutput((result.data as any[]).join("\n"));
         // Ascii output
         // setOutput(String.fromCharCode.apply(String, result.data))
       }
@@ -46,15 +46,15 @@ function CodeBlock() {
       if (is_error(result)) {
         setStatus(result.data as string);
       } else {
-        const output: Number[] = result.data[0] as Number[];
-        const mem: Number[] = result.data[1] as Number[];
+        const output: any[] = result.data[0] as any[];
+        const mem: any[] = result.data[1] as any[];
         const mem_pos = result.data[2];
         let display_mem = "";
         if (mem.length < 12) {
           display_mem = "| " + mem.join(" | ") + " |";
         } else {
-          const mem_first: Number[] = mem.slice(0, 4);
-          const mem_second: Number[] = mem.slice(mem.length - 4, mem.length - 1);
+          const mem_first: any[] = mem.slice(0, 4);
+          const mem_second: any[] = mem.slice(mem.length - 4, mem.length - 1);
           display_mem = "| " + mem_first.join(" | ") + " ... " + mem_second.join(" | ") + " | ";
         }
         setOutput(`--- ${mem.length} blocks ---\nmem_pos: ${mem_pos}\n`+display_mem + "\n-----------------\n" + output.join("\n"));
