@@ -80,8 +80,8 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
                 consume(TokenType.MACRO, "Expect `$=` after identifier");
                 const macro = [];
                 while (!match(TokenType.NEW_LINE)) {
-                    token_pos += 1;
                     macro.push(tokens[token_pos]);
+                    token_pos += 1;
                 }
                 current_env = <Env>assign(current_env, name, ["macro", macro]);
                 return 0;
@@ -91,7 +91,7 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<number[
                 if (!result) throw new Error(`Cannot find name ${name} in this scope.`)
                 if (Array.isArray(result)) {
                     if (result[0] === "macro") {
-                        console.log("APPLY", result[1]); // TODO
+                        tokens.splice(token_pos, 0, ...result[1]);
                     }
                 } else {
                     mem[mem_pos] = result; // literal
