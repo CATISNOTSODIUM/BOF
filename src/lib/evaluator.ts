@@ -1,4 +1,4 @@
-import { predeclared_objects } from "./predeclared";
+import { init_env } from "./predeclared";
 import { Result, Token, TokenType, ok, error, Env, EnvFrame} from "./types";
 
 // naive brainfuck evaluator
@@ -10,9 +10,7 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] |
     let marker: number[] = [];
     let global_env: Env = init_env(); // [name, value]
     let current_env: Env = global_env;
-    function init_env() {
-        return <Env>[predeclared_objects, null];
-    }
+    
     function find(env: Env, name: any): any | null {
         if (env !== null) {
             const frame = (<[EnvFrame, Env]>env)[0];
