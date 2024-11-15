@@ -71,7 +71,19 @@ mul $=
 |
 +++>++<mul
 ```
-## Predeclared macros
+## Recursion
+
+You can call macros to itself.
+
+```
+// recursion
+n = +++;
+f $= .[-f] |
+f
+```
+
+---
+# Predeclared macros
 
 ### `new`  
 The macro `new` moves the pointer to the position with `0`.
@@ -82,7 +94,7 @@ new .            // output: 1, mem_pos: 0
 ``` 
 ---
 
-## Predeclared functions
+# Predeclared functions
 
 Here are some functions that have been predeclared. Note that unlike macros, these functions are primitive and cannot be rewritten.
 
