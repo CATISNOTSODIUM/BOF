@@ -1,12 +1,21 @@
-import { EnvFrame, TokenType } from "./types";
+import { lexing } from "./lexer";
+import { Env,  unwrap } from "./types";
 
-export const predeclared_objects: EnvFrame = {
-    names: ["new", "chr"],
-    values: [
-        ["macro", [{type:TokenType.LEFT_PAREN,lexeme:""},
-        {type:TokenType.RIGHT,lexeme:""},
-        {type:TokenType.RIGHT_PAREN,lexeme:""}
-        ]],
-        ["function", (x: number) => String.fromCharCode(x)]
-    ]
+export function init_env(): Env {
+    let names: string[] = [];
+    let values: any[] = [];
+    function add_macros(name: string, source: string) {
+        const content = unwrap(lexing(source));
+        names.push(name);
+        values.push(["macro", content]);
+    }
+    function add_function(name: string, source: (x: any) => any) {
+        names.push(name);
+        values.push(["function", source]);
+    }
+    add_macros("new", "[>]");
+    add_macros("cpy", "x=.;>x");
+    add_function("chr", (x: number) => String.fromCharCode(x));
+    add_function("BOF", (_: number) => '🧠');
+    return [{names, values}, null];
 }

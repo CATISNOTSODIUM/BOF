@@ -71,8 +71,20 @@ mul $=
 |
 +++>++<mul
 ```
-## Predeclared macros
+## Recursion
 
+You can call macros to itself.
+
+```
+// recursion
+n = +++;
+f $= .[-f] |
+f
+```
+
+---
+# Predeclared macros
+---
 ### `new`  
 The macro `new` moves the pointer to the position with `0`.
 `new` is defined as `new $= [>] |`. Here is a simple example.
@@ -81,11 +93,19 @@ The macro `new` moves the pointer to the position with `0`.
 new .            // output: 1, mem_pos: 0
 ``` 
 ---
+### `cpy`  
+The macro `cpy` copy the value from this block and transfer its consecutive block.
+```
++++; // set initial value to 3
+cpy cpy cpy // memory [ 3 | 3 | 3 | 3 ]
+``` 
+---
 
-## Predeclared functions
+# Predeclared functions
 
 Here are some functions that have been predeclared. Note that unlike macros, these functions are primitive and cannot be rewritten.
 
+---
 ### `chr`  
 The function `chr` (primitive) reads the value from the current pointer and output the character based on ASCII code.
 Now, we can print `hello` in `BOF`.
@@ -96,3 +116,6 @@ Now, we can print `hello` in `BOF`.
 +++++++ chr chr // l l
 +++ chr // o
 ``` 
+---
+### `BOF`  
+The function `BOF` (primitive) outputs 🧠.

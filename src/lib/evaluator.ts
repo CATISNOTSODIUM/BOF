@@ -1,6 +1,118 @@
-import { predeclared_objects } from "./predeclared";
+import { init_env } from "./predeclared";
 import { Result, Token, TokenType, ok, error, Env, EnvFrame} from "./types";
 
+// refactor bf_evaluator
+/*
+export function $bf_evaluate(tokens: Token[], mem_return = false) {
+    const mem = [0];
+    let mem_pos = 0;
+    const stash: any[] = [];
+    const control: any[] = tokens; // load instruction
+    let global_env: Env = init_env(); // [name, value]
+    let current_env: Env = global_env;
+    // helper functions
+    function is_at_end() {
+        return (control.length === 0);
+    }
+    function advance() {
+        return control.pop();
+    }
+    function peek() {
+        return control[0];
+    }
+    function match(t: TokenType) {
+        if (is_at_end()|| peek().type != t) return false;
+        return true;
+    }
+    function find(env: Env, name: any): any | null {
+        if (env !== null) {
+            const frame = (<[EnvFrame, Env]>env)[0];
+            function $find(names: string[], values: any[]) {
+                for (let i = 0; i < names.length; i = i + 1) {
+                    if (names[i] === name) {
+                        return values[i];
+                    }
+                }
+                return null;
+            }
+            const value = $find(frame.names, frame.values);
+            if (value != null) return value;
+            return find((<[EnvFrame, Env]>env)[1], name);
+        }
+        return null;
+    }
+    function assign(env: Env, name: string, value: any){
+        if (env !== null) {
+            const frame = (<[EnvFrame, Env]>env)[0];
+            const next_env = (<[EnvFrame, Env]>env)[1];
+            const $names = frame.names;
+            const $values = frame.values;
+            
+            for (let i = 0; i < $names.length; i = i + 1) {
+                if ($names[i] === name) {
+                    $values[i] = value;
+                    return [{names: $names, values: $values}, next_env];// new env
+                }
+            }
+            $names.push(name)
+            $values.push(value)
+            const new_env =  [{names: $names, values: $values}, next_env];
+  
+            return new_env;
+        }
+        return [{names: [name], values: [value]}, null];
+    }
+    function sequences() {
+        if (!is_at_end()) {
+            const first = declaration();
+            sequences();
+        }
+    }
+    function consume(t: TokenType, msg: string) {
+        if (is_at_end()|| peek().type != t) throw new Error(msg);
+        advance();
+    }
+    function declaration() {
+        if (match(TokenType.IDENTIFIER)) {
+            advance();
+            if (match(TokenType.EQUAL)) {
+                consume(TokenType.EQUAL, "Expect '=' after identifier.");
+                const value = expression();
+                current_env = <Env>assign(current_env, peek().lexeme, value);
+                return value;
+            } else if (match(TokenType.MACRO)) {
+                consume(TokenType.MACRO, "Expect `$=` after identifier");
+                const macro = [];
+                while (!match(TokenType.BREAK) && !is_at_end()) {
+                    macro.push(peek());
+                    advance();
+                }
+                current_env = <Env>assign(current_env, peek().lexeme, ["macro", macro]);
+                return 0;
+            } else {
+                const name = peek().lexeme;
+                const result = find(current_env, name);
+                if (result == null) throw new Error(`Cannot find name '${name}' in this scope.`)
+                if (Array.isArray(result)) {
+                    if (result[0] === "macro") {
+                        result[1].push({type: TokenType.NEW_LINE, lexeme: ""});
+                        tokens.splice(token_pos, 0, ...result[1]); // FIX
+                    } else if (result[0] === "function") {
+                        stash.push(result[1](mem[mem_pos]));
+                    }
+                } else {
+                    mem[mem_pos] = result; // literal
+                }
+                return result;
+            }
+            
+        } 
+    }
+
+    function expression() {
+
+    }
+}*/
 // naive brainfuck evaluator
 export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] | [number[], number[], any], string> {
     const mem = [0];
@@ -10,9 +122,7 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] |
     let marker: number[] = [];
     let global_env: Env = init_env(); // [name, value]
     let current_env: Env = global_env;
-    function init_env() {
-        return <Env>[predeclared_objects, null];
-    }
+    
     function find(env: Env, name: any): any | null {
         if (env !== null) {
             const frame = (<[EnvFrame, Env]>env)[0];
