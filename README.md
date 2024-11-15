@@ -3,7 +3,7 @@ While brainf_ck is notoriously known for its minimalistic and impractical, BOF m
 
 ## Quick start
 You can try our beloved BOF in our playground <a href="https://bof-blush.vercel.app/">here</a>.
-Before start exploring BOF, we recommend you to learn the basic syntax of [<u>Brainfuck</u>](https://en.wikipedia.org/wiki/Brainfuck).
+Before start exploring BOF, we recommend you to learn the basic syntax of [<u>Brainf_ck</u>](https://en.wikipedia.org/wiki/Brainf_ck).
 Here are some quick examples.
 ```
 ++++--. // output 2 memory [2]
@@ -11,7 +11,7 @@ Here are some quick examples.
 ++++-->.++. // output 0, 2 memory [2 | 2]
 +++[>+<-]>. // output 3 memory [0 | 3]
 ```
-Taking user input can be a little bit tricky, so we decided not to include the character `,` (receive user input) from the Brainfuck. Therefore, only seven characters are included in the original language.
+Taking user input can be a little bit tricky, so we decided not to include the character `,` (receive user input) from the Brainf_ck. Therefore, only seven characters are included in the original language.
 
 ---
 ## Variables
@@ -24,7 +24,7 @@ x=.; > // memory [4 | 0], x = 4
 x; // memory [4 | 4]
 ```
 
-By assigning value to the dummy variable, move one step, and replace the original value with the dummary variable, we can transfer the data in `O(1)` step. Although having variable assignment ruins the esoterism of Brainfuck, but who cares? 
+By assigning value to the dummy variable, move one step, and replace the original value with the dummary variable, we can transfer the data in `O(1)` step. Although having variable assignment ruins the esoterism of Brainf_ck, but who cares? 
 
 Here is another example. 
 
@@ -71,13 +71,40 @@ mul $=
 |
 +++>++<mul
 ```
-## Predeclared macros
+## Recursion
 
-Here are some macros that have been predeclared. 
+You can call macros to itself.
 
-### `new` 
-
-The macro `new` moves the pointer to the position with `0`.
-`new` is defined as `new $= [>] |`.
+```
+// recursion
+n = +++;
+f $= .[-f] |
+f
+```
 
 ---
+# Predeclared macros
+
+### `new`  
+The macro `new` moves the pointer to the position with `0`.
+`new` is defined as `new $= [>] |`. Here is a simple example.
+```
++>+>+>+>+>+<<<<< // mem_pos: 6
+new .            // output: 1, mem_pos: 0
+``` 
+---
+
+# Predeclared functions
+
+Here are some functions that have been predeclared. Note that unlike macros, these functions are primitive and cannot be rewritten.
+
+### `chr`  
+The function `chr` (primitive) reads the value from the current pointer and output the character based on ASCII code.
+Now, we can print `hello` in `BOF`.
+
+```
+>++++++++[<+++++++++>-]< chr // h
+>++++[<+++++++>-]<+ chr // e
++++++++ chr chr // l l
++++ chr // o
+``` 
