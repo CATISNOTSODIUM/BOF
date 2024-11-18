@@ -1,17 +1,14 @@
-import { create_macros, init_env } from "./predeclared";
-import { Result, Token, TokenType, ok, error, Env, EnvFrame} from "./types";
 // naive brainfuck evaluator
-export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] | [number[], number[], Env, any], string> {
+export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] | [number[], number[], any], string> {
     const mem = [0];
     let mem_pos = 0;
     let token_pos = 0;
     let stash: number[] = [];
     let marker: number[] = [];
     let global_env: Env = init_env(); // [name, value]
-    let current_env: Env = [{names: [], values: []}, global_env];
+    let current_env: Env = global_env;
     
     function find(env: Env, name: any): any | null {
-        console.log("FIND", name, env);
         if (env !== null) {
             const frame = (<[EnvFrame, Env]>env)[0];
             function $find(names: string[], values: any[]) {
@@ -112,15 +109,15 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] |
     }
     function expression(): number {
         const token = tokens[token_pos];
-        if (match(TokenType.LEFT)) mem_pos = Math.max(0, mem_pos - 1);
-        if (match(TokenType.RIGHT)) {
+        if (token.type == TokenType.LEFT) mem_pos = Math.max(0, mem_pos - 1);
+        if (token.type == TokenType.RIGHT) {
             mem_pos += 1;
             if (mem_pos >= mem.length) mem.push(0);
         }
-        if (match(TokenType.PLUS)) mem[mem_pos] += 1;
-        if (match(TokenType.MINUS)) mem[mem_pos] -= 1;
-        if (match(TokenType.DOT)) stash.push(mem[mem_pos]);
-        if (match(TokenType.LEFT_PAREN)) {
+        if (token.type == TokenType.PLUS) mem[mem_pos] += 1;
+        if (token.type == TokenType.MINUS) mem[mem_pos] -= 1;
+        if (token.type == TokenType.DOT) stash.push(mem[mem_pos]);
+        if (token.type == TokenType.LEFT_PAREN) {
             if (mem[mem_pos] != 0) {
                 marker.push(token_pos);
             } else {
@@ -129,7 +126,7 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] |
                 }
             }
         }
-        if (match(TokenType.RIGHT_PAREN)) {
+        if (token.type == TokenType.RIGHT_PAREN) {
             const top = marker.pop();
             if (top && mem[mem_pos] > 0) {
                 token_pos = top - 1;
@@ -148,11 +145,13 @@ export function bf_evaluate(tokens: Token[], mem_return = false): Result<any[] |
         
         return mem[mem_pos];
     }
+
+    
     try {
         sequences();
     } catch (e) {
         return error((<Error>e).message);
     }
     if (!mem_return) return ok(stash);
-    else return ok([stash, mem, current_env, mem_pos]);
+    else return ok([stash, mem, mem_pos]);
 }
