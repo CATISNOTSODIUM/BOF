@@ -43,13 +43,15 @@ Macros abstracts the repeated instruction, making the code more readable.
 
 Here is some quick example.
 ```
-x $= ++++.> |  // add 4 to the current block, output its value and move to its consecutive block.
+x $= ++++.> |  // add 4 to the current block, 
+// output its value and move to its consecutive block.
 x x x // output 4, 4, 4 memory [ 4 | 4 | 4 | 0 ]
 ```
 
 You can do bunch of cool things with macros.
 ```
-mov $= [->+<]> | // allocate value from current block to the next one
+mov $= [->+<]> | // allocate value from current block
+// to the next one.
 + mov mov mov // memory [ 0 | 0 | 0 | 1 ]
 ```
 ---
@@ -57,7 +59,8 @@ mov $= [->+<]> | // allocate value from current block to the next one
 Note that macros is multi-lined by default. You have to use `|` to stop recording macros. Here is another example.
 
 ```
-cpy $= x=.;>x| // copy the value from this block and transfer to another block.
+cpy $= x=.;>x| // copy the value from this block 
+// and transfer to another block.
 +++; // set initial value to 3
 cpy cpy cpy // memory [ 3 | 3 | 3 | 3 ]
 ```

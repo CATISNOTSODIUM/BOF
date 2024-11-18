@@ -19,3 +19,8 @@ export function init_env(): Env {
     add_function("BOF", (_: number) => '🧠');
     return [{names, values}, null];
 }
+
+export function create_macros(source: string) {
+    const content = unwrap(lexing(source));
+    return ["macro", content];
+}
